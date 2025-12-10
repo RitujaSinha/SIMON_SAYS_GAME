@@ -18,11 +18,18 @@ document.addEventListener("keypress", function() {
     }
 });
 
-function btnFlash(btn){
+function gameFlash(btn){
     btn.classList.add("flash");
     setTimeout(function() {
         btn.classList.remove("flash");
-    }, 1000);
+    }, 250);
+}
+
+function userFlash(btn){
+    btn.classList.add("userflash");
+    setTimeout(function() {
+        btn.classList.remove("userflash");
+    }, 250);
 }
 
 function levelUp(){
@@ -33,9 +40,43 @@ function levelUp(){
     let randColor = btns[randIdx];
 
     let randbtn = document.querySelector(`.${randColor}`);
-    console.log(randIdx);
-    console.log(randColor);
-    console.log(randbtn);
+    // console.log(randIdx);
+    // console.log(randColor);
+    // console.log(randbtn);
 
-    btnFlash(randbtn);
+    gameSeq.push(randColor);
+    console.log(gameSeq);
+
+    gameFlash(randbtn);
+}
+
+function checkAns(){
+    // console.log("curr level : ", level);
+
+    let idx = level-1;
+
+    if(userSeq[idx] == gameSeq[idx]){
+        if(userSeq.length == gameSeq.length) {
+            setTimeout(levelUp, 1000);
+        }
+    } else{
+        h2.innerText = `Game Over! Press any key to start.`;
+    }
+} 
+
+
+function btnPress() {
+    console.log(this);
+   let btn = this;
+   userFlash(btn);
+
+   userColor = btn.getAttribute("id");
+   userSeq.push(userColor);
+
+   checkAns(userSeq.length-1);
+}
+
+let allBtns = document.querySelectorAll(".btn");
+for(btn of allBtns) {
+    btn.addEventListener("click", btnPress);
 }
